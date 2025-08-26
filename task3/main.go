@@ -39,12 +39,65 @@ func deleteStudent() {
 	models.DB.Where("age < ?", 20).Delete(&student)
 	fmt.Println("删除成功")
 }
+func queryEmployee() {
+	employees := []models.Employee{}
+	models.DB.Where("department = ?", "技术部").Find(&employees)
+	fmt.Println("查出技术部的数据:", employees)
+}
+func queryMaxEmployee() {
+	employees := []models.Employee{}
+	models.DB.Raw("select * from employee where salary in (select max(salary) from employee)").Scan(&employees)
+	fmt.Println("查出工资最高的员工:", employees)
+}
+
+/*
+测试添加文章时 更新用户文章数量的钩子函数
+*/
+func testInsertPostHook() {
+
+	post := models.Post{
+		Title:  "测试添加文章",
+		UserId: 1,
+	}
+	result := models.DB.Create(&post) // 通过数据的指针来创建
+	fmt.Println("测试添加文章影响行数: ", result.RowsAffected)
+}
+
 func main() {
 	// deleteStudent()
 	// testInsertStudent()
 	// updateStudent()
 	// queryByAge()
-	accountTest()
+	// accountTest()
+	// queryEmployee()
+	// queryMaxEmployee()
+	// queryUserPost()
+	// queryMaxComment()
+	testInsertPostHook()
+}
+
+/*
+使用Gorm查询某个用户发布的所有文章及其对应的评论信息
+*/
+func queryUserPost() {
+	user := models.User{}
+	models.DB.Preload("Post").Preload("Post.Comment").Where("user.id = ?", 1).Find(&user)
+	fmt.Println("获取出的用户信息: ", user)
+}
+
+/*
+编写Go代码，使用Gorm查询评论数量最多的文章信息
+*/
+func queryMaxComment() {
+	var result []models.Post
+	models.DB.Raw(`select * from post where id in (
+	select post_id from (
+		SELECT  post_id,count(*) as count from comment GROUP BY post_id 
+		HAVING count(*) = (select MAX(count) from (
+		SELECT count(*) as count from comment  GROUP BY post_id ) as counts) 
+		) as a )`).Scan(&result)
+	fmt.Println("查询出的评论数最多的文章: ", result)
+
 }
 
 /*
