@@ -10,6 +10,6 @@ func UserRoutersInit(r *gin.Engine) {
 	userRouters := r.Group("/user")
 	{
 		userRouters.POST("/register", controller.UserController{}.Register)
-
+		userRouters.POST("/login", controller.UserController{}.Login)
 	}
 }

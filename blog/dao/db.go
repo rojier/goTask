@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"blog/constant"
 	"fmt"
 
 	"gorm.io/driver/mysql"
@@ -11,8 +12,8 @@ var DB *gorm.DB
 var err error
 
 func init() {
-	dsn := "root:123456@tcp(localhost:3306)/golearn_blog?charset=utf8mb4&parseTime=True&loc=Local"
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
+
+	DB, err = gorm.Open(mysql.Open(constant.DB_PATH), &gorm.Config{
 		QueryFields: true, //开启打印
 	})
 	if err != nil {

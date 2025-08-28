@@ -3,6 +3,7 @@ package controller
 import (
 	"blog/dao"
 	"blog/service"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -31,5 +32,28 @@ func (userController UserController) Register(c *gin.Context) {
 		Email:    loginReq.Email,
 	}
 	err := service.UserService{}.Regitser(user)
-	userController.RspCommon(c, err)
+	userController.RspCommonError(c, err)
+}
+
+func (userController UserController) Login(c *gin.Context) {
+	var loginReq LoginRequest
+	if err := c.ShouldBindJSON(&loginReq); err != nil {
+		userController.RspError(c)
+		return
+	}
+	user := dao.User{
+		UserName: loginReq.Username,
+		PassWord: loginReq.Password,
+	}
+
+	token, err := service.UserService{}.Login(user)
+	if err != nil {
+		userController.RspCommonError(c, err)
+	} else {
+		//将令牌添加到请求头中
+		fmt.Println("生成的token: ", token)
+		c.Request.Header.Set("Authorization", "Bearer "+token)
+		userController.RspSuccess(c, nil)
+	}
+
 }

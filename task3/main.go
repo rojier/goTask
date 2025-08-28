@@ -74,6 +74,10 @@ func main() {
 	// queryUserPost()
 	// queryMaxComment()
 	testInsertPostHook()
+
+	// hashedPassword, _ := bcrypt.GenerateFromPassword([]byte("123"), bcrypt.DefaultCost)
+	// fmt.Println(string(hashedPassword))
+
 }
 
 /*
