@@ -2,13 +2,8 @@ package tool
 
 import (
 	"crypto/md5"
-	"crypto/rand"
-	"encoding/base64"
 	"fmt"
-	"os"
 	"time"
-
-	"github.com/golang-jwt/jwt/v5"
 )
 
 func UnixToDate(timestamp int) string {
@@ -40,26 +35,4 @@ func GetDay() string {
 func Md5(str string) string {
 	data := []byte(str)
 	return fmt.Sprintf("%x\n", md5.Sum(data))
-}
-func GenerateToken(userID string, roles []string) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"userID": userID,
-		"roles":  roles,
-		"exp":    time.Now().Add(8 * time.Hour).Unix(),
-	})
-	return token.SignedString([]byte(os.Getenv("JWT_SECRET")))
-}
-
-/*
-JWT SecretKey
-密钥长度至少 32 字节（256 位），以应对暴力破解
-*/
-
-func GenerateSecretKey() (string, error) {
-	key := make([]byte, 32) // 256位
-	_, err := rand.Read(key)
-	if err != nil {
-		return "", err
-	}
-	return base64.StdEncoding.EncodeToString(key), nil
 }

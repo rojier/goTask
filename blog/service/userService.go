@@ -1,12 +1,10 @@
 package service
 
 import (
-	"blog/constant"
 	"blog/dao"
+	"blog/tool"
 	"errors"
-	"time"
 
-	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -57,13 +55,8 @@ func (userService UserService) Login(user dao.User) (string, error) {
 	if err := bcrypt.CompareHashAndPassword([]byte(storedUser.PassWord), []byte(user.PassWord)); err != nil {
 		return "", errors.New("密码错误")
 	}
-	// 生成 JWT
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"userId":   storedUser.Id,
-		"userName": storedUser.UserName,
-		"exp":      time.Now().Add(time.Hour * 24).Unix(),
-	})
-	if mtokenString, err := token.SignedString([]byte(constant.JWT_SECRET)); err != nil {
+	// 生成 token
+	if mtokenString, err := tool.GenerateToken(storedUser); err != nil {
 		return "", errors.New("Failed to generate token")
 	} else {
 		return mtokenString, nil

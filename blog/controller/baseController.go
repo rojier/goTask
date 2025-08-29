@@ -23,7 +23,7 @@ func (c BaseController) RspEMsg(ctx *gin.Context, errorMsg string) {
 func (c BaseController) RspError(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, tool.ReponseError())
 }
-func (b BaseController) RspCommonError(ctx *gin.Context, err error) {
+func (b BaseController) RspCommon(ctx *gin.Context, err error) {
 	if err == nil {
 		ctx.JSON(http.StatusOK, tool.ReponseSuccess(nil))
 	} else {
