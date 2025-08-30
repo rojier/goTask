@@ -31,3 +31,33 @@ func (postService PostService) UserPosts(userId int, postId int) []dao.Post {
 	return posts
 
 }
+func (postService PostService) UpdatePost(post dao.Post) error {
+
+	var dbPost dao.Post
+	if err := dao.DB.Where("user_id = ? and id = ?", post.UserID, post.ID).First(&dbPost).Error; err != nil {
+		return errors.New("该用户无该文章权限")
+
+	}
+	post.CreateTime = dbPost.CreateTime
+	result := dao.DB.Save(&post)
+	if result.RowsAffected > 0 {
+		return nil
+	} else {
+		return errors.New("更新失败")
+	}
+}
+
+func (postService PostService) DeletePost(userId int, postId int) error {
+	var dbPost dao.Post
+	if err := dao.DB.Where("user_id = ? and id = ?", userId, postId).First(&dbPost).Error; err != nil {
+		return errors.New("该用户无该文章权限")
+
+	}
+	result := dao.DB.Delete(&dbPost)
+	if result.RowsAffected > 0 {
+		return nil
+	} else {
+		return errors.New("更新失败")
+	}
+
+}

@@ -11,6 +11,8 @@ func PostRoutersInit(r *gin.Engine) {
 	{
 		userRouters.POST("/add", controller.PostController{}.AddPost)
 		userRouters.POST("/userPosts", controller.PostController{}.UserPosts)
+		userRouters.POST("/update", controller.PostController{}.UpdatePost)
+		userRouters.POST("/delete", controller.PostController{}.DeletePost)
 
 	}
 }

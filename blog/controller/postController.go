@@ -18,7 +18,7 @@ type AddPostRequest struct {
 	Title   string `json:"title" binding:"required"`
 }
 type UserPostRequest struct {
-	PostID int `json:"postID"`
+	PostId int `json:"postId"`
 }
 
 /*
@@ -52,6 +52,34 @@ func (postController PostController) UserPosts(c *gin.Context) {
 		postController.RspEMsg(c, "请求参数错误")
 		return
 	}
-	posts := service.PostService{}.UserPosts(c.GetInt("userId"), userPostRequest.PostID)
+	posts := service.PostService{}.UserPosts(c.GetInt("userId"), userPostRequest.PostId)
 	postController.RspSuccess(c, posts)
+}
+
+/*
+修改
+*/
+func (postController PostController) UpdatePost(c *gin.Context) {
+	var post dao.Post
+	if err := c.ShouldBindJSON(&post); err != nil {
+		postController.RspEMsg(c, "请求参数错误")
+		return
+	}
+	post.UserID = uint(c.GetInt("userId"))
+	post.UpdateTime = time.Now()
+	err := service.PostService{}.UpdatePost(post)
+	postController.RspCommon(c, err)
+}
+
+/*
+删除
+*/
+func (postController PostController) DeletePost(c *gin.Context) {
+	var userPostRequest UserPostRequest
+	if err := c.ShouldBindJSON(&userPostRequest); err != nil {
+		postController.RspEMsg(c, "请求参数错误")
+		return
+	}
+	err := service.PostService{}.DeletePost(c.GetInt("userId"), userPostRequest.PostId)
+	postController.RspCommon(c, err)
 }

@@ -1,0 +1,23 @@
+CREATE TABLE USER (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	user_name VARCHAR (50) NOT NULL,
+	pass_word VARCHAR (100) NOT NULL,
+	email VARCHAR (50) NOT NULL
+
+);
+
+CREATE TABLE POST (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	user_id INT NOT NULL  COMMENT '用户id',
+	title VARCHAR (100) NOT NULL  COMMENT '文章标题',
+	content text   NULL  COMMENT '文章内容',
+	create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	update_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间'
+);
+
+select * from POST;
+
+delete from post;
+DROP table POST;
+
+select * from USER;
