@@ -15,6 +15,18 @@ CREATE TABLE POST (
 	update_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间'
 );
 
+CREATE TABLE COMMENT (
+	id INT PRIMARY KEY AUTO_INCREMENT,
+	content text NULL COMMENT '评论内容',
+	post_id INT NOT NULL COMMENT '文章id',
+	user_id INT NOT NULL COMMENT '用户id',
+	create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+	update_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间'
+);
+
+
+
+select * from COMMENT;
 select * from POST;
 
 delete from post;
