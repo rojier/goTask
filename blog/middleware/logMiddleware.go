@@ -6,11 +6,31 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"os"
 
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
+
+var log = logrus.New()
+
+func InitLogger() {
+	// JSON格式更适合日志分析系统
+	log.SetFormatter(&logrus.JSONFormatter{
+		TimestampFormat: "2006-01-02 15:04:05",
+	})
+	// 设置日志级别
+	log.SetLevel(logrus.InfoLevel)
+	// 同时输出到控制台和文件
+	log.SetOutput(os.Stdout)
+	// 如果需要同时输出到文件
+	file, err := os.OpenFile("gin.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err == nil {
+		log.SetOutput(io.MultiWriter(os.Stdout, file))
+	}
+}
 
 // CustomResponseWriter 自定义 ResponseWriter 用于捕获响应体:cite[1]:cite[3]:cite[7]
 type CustomResponseWriter struct {
@@ -23,6 +43,7 @@ func (w CustomResponseWriter) Write(b []byte) (int, error) {
 	w.body.Write(b)
 	return w.ResponseWriter.Write(b)
 }
+
 func LoggerMidderware() gin.HandlerFunc {
 
 	return func(c *gin.Context) {
@@ -70,6 +91,12 @@ func LoggerMidderware() gin.HandlerFunc {
 		fmt.Printf("***********ReqStart************\nURL: %v Method: %v\nUID: %v\nTime: %v\nRawQuery: %v\nReqData: %s\n***********ReqEnd************\n",
 			path, method, uId, tool.GetDate(), rawQuery, reqData)
 
+		log.WithFields(logrus.Fields{
+			"method": method,
+			"path":   path,
+			"nUID":   uId,
+			"ip":     c.ClientIP(),
+		}).Info(reqData)
 		// 打印查询参数 (Query Parameters):cite[2]:cite[4]
 		if len(c.Request.URL.Query()) > 0 {
 			fmt.Println("查询参数:", uId)
@@ -112,5 +139,12 @@ func LoggerMidderware() gin.HandlerFunc {
 		// 打印响应信息
 		fmt.Printf("***********RspStart************\nURL :%v\nUID: %v\nRspStatus: %v\nConsumeTime: %v\nRspData: %s\n***********RspEnd************\n",
 			path, uId, statusCode, latency, rspData)
+
+		log.WithFields(logrus.Fields{
+			"method":      method,
+			"RspStatus":   statusCode,
+			"ConsumeTime": latency,
+			"UID":         uId,
+		}).Info(rspData)
 	}
 }

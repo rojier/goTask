@@ -1,4 +1,0 @@
-{"ip":"::1","level":"info","method":"POST","msg":"request received","path":"/comment/postComments","time":"2025-08-30 18:21:29"}
-{"ip":"::1","level":"info","method":"POST","msg":"request received","path":"/comment/postComments","time":"2025-08-30 18:21:52"}
-{"ip":"::1","level":"info","method":"POST","msg":"{\n  \"postId\": 1\n}","nUID":"17565497233000329006be94fc4d4a2d70acc08","path":"/comment/postComments","time":"2025-08-30 18:28:43"}
-{"ConsumeTime":11225800,"RspStatus":200,"UID":"17565497233000329006be94fc4d4a2d70acc08","level":"info","method":"POST","msg":"{\n  \"code\": 200,\n  \"msg\": \"操作成功\",\n  \"data\": [\n    {\n      \"ID\": 1,\n      \"content\": \"围，才能避免出现不必要的错误\",\n      \"UserID\": 1,\n      \"PostId\": 1,\n      \"CreateTime\": \"2025-08-30T16:17:30+08:00\",\n      \"UpdateTime\": \"2025-08-30T16:17:30+08:00\"\n    }\n  ]\n}","time":"2025-08-30 18:28:43"}
