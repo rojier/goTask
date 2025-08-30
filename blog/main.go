@@ -15,5 +15,6 @@ func main() {
 	//注册路由
 	routers.UserRoutersInit(r)
 	routers.PostRoutersInit(r)
+	routers.CommentRoutersInit(r)
 	r.Run(":8081")
 }

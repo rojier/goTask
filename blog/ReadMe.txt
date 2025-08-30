@@ -75,3 +75,24 @@ http://localhost:8081/post/update
  "content":"总之修改，int类型和uint类型之间的转换需要根据具体的情况而定，需要充分了解数据类型的特征和范围，才能避免出现不必要的错误"
 }
 响应参数:公共响应参数
+
+2.7删除评论 http://localhost:8081/comment/delete
+请求参数
+{
+ "commentId":20
+}
+响应参数:公共响应参数
+
+2.8 添加文章评论 http://localhost:8081/comment/add
+{
+ "postId":1,
+ "content":"围，才能避免出现不必要的错误"
+}
+响应参数:公共响应参数
+
+2.9 查询文章的评论 http://localhost:8081/comment/postComments
+请求参数
+{
+ "postId":1
+}
+响应参数:公共响应参数
